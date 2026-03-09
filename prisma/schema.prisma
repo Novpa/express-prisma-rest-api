@@ -1,0 +1,98 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Member {
+  id             String         @id @default(uuid())
+  firstName      String         @db.VarChar(50)
+  lastName       String         @db.VarChar(50)
+  address        String         @db.VarChar(255)
+  email          String         @db.VarChar(100) @unique
+  ExpirationDate DateTime       @db.Date
+  phoneNumber    String         @db.VarChar(12)
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+  deletedAt      DateTime?
+  transactions   transactions[]
+
+  @@map("members")
+}
+
+model Staff {
+  id           String         @id @default(uuid())
+  firstName    String         @db.VarChar(50)
+  lastName     String         @db.VarChar(50)
+  role         Role
+  email        String         @db.VarChar(100) @unique
+  password     String         @db.VarChar(25)
+  hiredAt      DateTime       @db.Date
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  deletedAt    DateTime?
+  birthDate    DateTime       @db.Date
+  transactions transactions[]
+
+  @@map("staff")
+}
+
+model Book {
+  id               String            @id @default(uuid())
+  isbn             String            @db.VarChar(20)
+  title            String            @db.VarChar(100)
+  author           String            @db.VarChar(50)
+  releasedDate     DateTime          @db.Date
+  publisher        String            @db.VarChar(100)
+  category         Category
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+  deletedAt        DateTime?
+  transactionitems TransactionItem[]
+
+  @@map("books")
+}
+
+model TransactionItem {
+  id            String       @id @default(uuid())
+  transactionId String
+  bookId        String
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+  deletedAt     DateTime?
+  books         Book         @relation(fields: [bookId], references: [id])
+  transactions  transactions @relation(fields: [transactionId], references: [id])
+
+  @@map("transaction_item")
+}
+
+model transactions {
+  id               String            @id @default(uuid())
+  staffId          String
+  memberId         String
+  returnDate       DateTime          @db.Date
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime
+  deletedAt        DateTime?
+  transactionitems TransactionItem[]
+  members          Member            @relation(fields: [memberId], references: [id])
+  staff            Staff             @relation(fields: [staffId], references: [id])
+}
+
+enum Role {
+  STAFF
+  ADMIN
+  MANAGER
+}
+
+enum Category {
+  FICTION
+  HISTORY
+  FANTASY
+  HORROR
+  MOTIVATIONAL
+  SCIENCE
+}
