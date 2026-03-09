@@ -1,9 +1,8 @@
 import { Request, Response } from "express";
 import { authService } from "../services/auth.service";
-import prisma from "../config/prisma-client.config";
-import { Staff } from "../../generated/prisma/client";
 
 export const authController = {
+  //? REGISTER
   async register(req: Request, res: Response) {
     const { firstName, lastName, role, birthDate, email, password, hiredAt } =
       req.body;
@@ -36,6 +35,27 @@ export const authController = {
         firstName,
         lastName,
       },
+    });
+  },
+
+  //? GETDATA STAFF
+  async getAllStaff(req: Request, res: Response) {
+    //? If undefined, put default value, if not then convert it to numeber
+
+    const page =
+      req.query.page === undefined ? 1 : Number(req.query.page as string);
+    const limit =
+      req.query.limit === undefined ? 10 : Number(req.query.limit as string);
+
+    const { allStaff, totalData, currentPage } = await authService.getAllStaff({
+      page,
+      limit,
+    });
+
+    res.status(200).json({
+      success: true,
+      message: "Fetch staff data is successful",
+      data: { currentPage, totalData, allStaff },
     });
   },
 };
