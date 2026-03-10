@@ -1,5 +1,6 @@
 import express, { Express, NextFunction, Request, Response } from "express";
 import authRouter from "./routers/auth.router";
+import bookRouter from "./routers/books.router";
 
 const app: Express = express();
 const PORT = 8000;
@@ -7,6 +8,8 @@ const PORT = 8000;
 app.use(express.json());
 
 app.use("/api/staff", authRouter);
+app.use("/api/book", bookRouter);
+
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
   res.status(500).json({
     success: false,

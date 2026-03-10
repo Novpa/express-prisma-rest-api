@@ -5,13 +5,28 @@ export const booksController = {
   async addBook(req: Request, res: Response) {
     const { isbn, title, author, releasedDate, publisher, category } = req.body;
 
-    await booksService({
+    await booksService.createBook({
       isbn,
       title,
       author,
-      releasedDate,
+      releasedDate: new Date(releasedDate),
       publisher,
       category,
+    });
+
+    console.log(new Date(releasedDate));
+
+    res.status(201).json({
+      success: true,
+      message: "Book created successfully",
+      data: {
+        isbn,
+        title,
+        author,
+        releasedDate,
+        publisher,
+        category,
+      },
     });
   },
 };
