@@ -7,7 +7,7 @@ export const authController = {
     const { firstName, lastName, role, birthDate, email, password, hiredAt } =
       req.body;
 
-    //? Check if the email is unique
+    // Check if the email is unique
     const isUnique = await authService.findUniqueEmail(email);
 
     if (isUnique) {
@@ -38,9 +38,9 @@ export const authController = {
     });
   },
 
-  //? GETDATA STAFF
+  //? GETDATA ALL STAFF
   async getAllStaff(req: Request, res: Response) {
-    //? If undefined, put default value, if not then convert it to numeber
+    // If undefined, put default value, if not then convert it to numeber
 
     const page =
       req.query.page === undefined ? 1 : Number(req.query.page as string);

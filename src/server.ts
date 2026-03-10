@@ -6,7 +6,7 @@ const PORT = 8000;
 
 app.use(express.json());
 
-app.use("/", authRouter);
+app.use("/api/staff", authRouter);
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
   res.status(500).json({
     success: false,
