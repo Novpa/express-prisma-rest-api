@@ -3,6 +3,7 @@ import prisma from "../config/prisma-client.config";
 // import { Book } from "../types/bookTypes";
 
 export const booksService = {
+  //? CREATE BOOK
   async createBook({
     isbn,
     title,
@@ -23,6 +24,7 @@ export const booksService = {
     });
   },
 
+  //? GET ALL BOOK
   async getAllBooks({ page, limit }: { page: number; limit: number }) {
     const offset = (page - 1) * limit;
     const books = await prisma.book.findMany({
@@ -34,5 +36,20 @@ export const booksService = {
     });
 
     return { books, totalData: books.length, currentPage: page };
+  },
+
+  //? GET BOOK BY ID
+  async getBookById(bookId: string) {
+    const book = await prisma.book.findFirst({
+      where: {
+        id: bookId,
+      },
+    });
+
+    if (!book) {
+      throw new Error("Invalid params book id");
+    }
+
+    return book;
   },
 };

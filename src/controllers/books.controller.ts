@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { booksService } from "../services/books.service";
 
 export const booksController = {
+  //? CREATE BOOKS
   async addBook(req: Request, res: Response) {
     const { isbn, title, author, releasedDate, publisher, category } = req.body;
 
@@ -30,6 +31,7 @@ export const booksController = {
     });
   },
 
+  //? GET ALL BOOK DATA
   async getAllBooks(req: Request, res: Response) {
     const page = req.query.page === undefined ? 1 : Number(req.query.page);
     const limit = req.query.limit === undefined ? 10 : Number(req.query.limit);
@@ -51,6 +53,18 @@ export const booksController = {
         currentPage,
         books,
       },
+    });
+  },
+
+  async getBookById(req: Request, res: Response) {
+    const bookId = req.params.id as string;
+
+    const book = await booksService.getBookById(bookId);
+
+    res.status(200).json({
+      success: true,
+      message: "Fetch book item successful",
+      data: book,
     });
   },
 };
