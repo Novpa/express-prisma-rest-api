@@ -13,7 +13,7 @@ model Member {
   lastName       String         @db.VarChar(50)
   address        String         @db.VarChar(255)
   email          String         @db.VarChar(100) @unique
-  ExpirationDate DateTime       @db.Date
+  expirationDate DateTime       @db.Date
   phoneNumber    String         @db.VarChar(12)
   createdAt      DateTime       @default(now())
   updatedAt      DateTime       @updatedAt

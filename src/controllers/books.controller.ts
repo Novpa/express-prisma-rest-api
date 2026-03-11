@@ -56,6 +56,7 @@ export const booksController = {
     });
   },
 
+  //? GET BOOK BY ID
   async getBookById(req: Request, res: Response) {
     const bookId = req.params.id as string;
 
