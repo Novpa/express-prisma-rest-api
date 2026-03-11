@@ -29,4 +29,28 @@ export const booksController = {
       },
     });
   },
+
+  async getAllBooks(req: Request, res: Response) {
+    const page = req.query.page === undefined ? 1 : Number(req.query.page);
+    const limit = req.query.limit === undefined ? 10 : Number(req.query.limit);
+
+    if (isNaN(page) || isNaN(limit)) {
+      throw new Error("Invalid query, page & limit should be integers");
+    }
+
+    const { books, totalData, currentPage } = await booksService.getAllBooks({
+      page,
+      limit,
+    });
+
+    res.status(200).json({
+      success: true,
+      message: "Fetch books data successfull",
+      data: {
+        totalData,
+        currentPage,
+        books,
+      },
+    });
+  },
 };

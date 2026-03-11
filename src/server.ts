@@ -13,7 +13,7 @@ app.use("/api/book", bookRouter);
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
   res.status(500).json({
     success: false,
-    message: "Registered staff failed",
+    message: "There's something wrong!",
     error: err.message,
   });
 });

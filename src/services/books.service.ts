@@ -22,4 +22,17 @@ export const booksService = {
       },
     });
   },
+
+  async getAllBooks({ page, limit }: { page: number; limit: number }) {
+    const offset = (page - 1) * limit;
+    const books = await prisma.book.findMany({
+      take: limit,
+      skip: offset,
+      where: {
+        deletedAt: null,
+      },
+    });
+
+    return { books, totalData: books.length, currentPage: page };
+  },
 };
