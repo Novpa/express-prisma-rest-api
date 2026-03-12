@@ -40,9 +40,10 @@ export const booksService = {
 
   //? GET BOOK BY ID
   async getBookById(bookId: string) {
-    const book = await prisma.book.findFirst({
+    const book = await prisma.book.findUnique({
       where: {
         id: bookId,
+        deletedAt: null,
       },
     });
 
