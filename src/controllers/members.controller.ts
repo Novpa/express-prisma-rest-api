@@ -1,8 +1,9 @@
 import { Request, Response } from "express";
 import { memberService } from "../services/member.service";
+import { catchAsync } from "../utils/catchAsync";
 
 export const membersController = {
-  async createMember(req: Request, res: Response) {
+  createMember: catchAsync(async (req: Request, res: Response) => {
     const { firstName, lastName, address, email, phoneNumber } = req.body;
 
     const result = await memberService.createMember({
@@ -18,26 +19,31 @@ export const membersController = {
       message: "Member created successfully",
       data: result,
     });
-  },
+  }),
 
-  async getAllMembers(req: Request, res: Response) {
+  getAllMembers: catchAsync(async (req: Request, res: Response) => {
     const page = req.query.page === undefined ? 1 : Number(req.query.page);
     const limit = req.query.limit === undefined ? 10 : Number(req.query.limit);
     const search = req.query.search as string;
     const status = req.query.status as string;
 
-    const { members, totalData, totalPage } = await memberService.getAllMembers(
-      { page, limit, search, status },
-    );
+    const data = await memberService.getAllMembers({
+      page,
+      limit,
+      search,
+      status,
+    });
+
+    console.log("getAllMembers", data);
 
     res.status(200).json({
       success: true,
       message: "Fetch member data successfull",
       data: {
-        members,
-        totalData,
-        totalPage,
+        totalData: data?.totalData,
+        totalPage: data?.totalPage,
+        members: data?.members,
       },
     });
-  },
+  }),
 };
